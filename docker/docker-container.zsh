@@ -1,14 +1,16 @@
 script_path=$0:A;
 docker_path=$(dirname $script_path);
 project_path=$(dirname $docker_path);
-notebooks_path="$project_path/notebooks";
+project_name=$(basename $project_path);
+
+IMAGE_ID=${1:-miniconda_jupyter}
+CONTAINER_ID=${1:-$project_name-v0}
 
 DOCKER_HOST_URL=$(echo $DOCKER_HOST | grep -Eo '\d.*:' | sed 's/://g');
 
-echo "Running 'miniconda_jupyter' container in detached mode:"
+echo "Running '$CONTAINER_ID' container in detached mode, using '$IMAGE_ID' image:"
 
-if docker run -d -v $notebooks_path:/notebooks -p 8888:8888 miniconda_jupyter; then \
-    CONTAINER_ID=$(docker ps -l | tail -1 | grep -Eo '^\w+');
+if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID $IMAGE_ID; then \
     SERVER_URL='';
 
     while [[ $SERVER_URL == '' ]] do

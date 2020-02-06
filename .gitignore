@@ -1,3 +1,15 @@
+## User
+
+# Ignore data/ files and folders recursively
+/data/**
+# Exclude subfolders from the ignore rules
+!/data/**/
+# Now we can whitelist .gitkeep in those subfolders
+!/data/**/.gitkeep
+
+
+## Python defaults
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

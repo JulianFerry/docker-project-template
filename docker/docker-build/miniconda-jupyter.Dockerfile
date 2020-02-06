@@ -3,8 +3,8 @@ FROM continuumio/miniconda3:latest
 
 LABEL MAINTAINER="Julian Ferry <julianferry94@gmail.com>"
 
-VOLUME /notebooks
-WORKDIR /notebooks
+VOLUME /project
+WORKDIR /project
 
 ADD requirements.txt /
 
