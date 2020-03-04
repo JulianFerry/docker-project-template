@@ -10,7 +10,11 @@ DOCKER_HOST_URL=$(echo $DOCKER_HOST | grep -Eo '\d.*:' | sed 's/://g');
 
 echo "Running '$CONTAINER_ID' container in detached mode, using '$IMAGE_ID' image:"
 
-if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID $IMAGE_ID; then \
+# Create 'dockerhost' network if it doesn't exist
+docker network inspect dockerhost_net  >/dev/null 2>&1 || docker network create dockerhost_net
+
+# Create container
+if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID --net=dockerhost_net $IMAGE_ID; then \
     SERVER_URL='';
 
     while [[ $SERVER_URL == '' ]] do
