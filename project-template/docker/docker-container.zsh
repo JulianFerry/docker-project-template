@@ -11,7 +11,7 @@ DOCKER_HOST_URL=127.0.0.1
 echo "Running '$CONTAINER_ID' container in detached mode, using '$IMAGE_ID' image:"
 
 # Create 'dockerhost' network if it doesn't exist
-docker network inspect dockerhost_net  >/dev/null 2>&1 || docker network create dockerhost_net
+docker network inspect dockernet  >/dev/null 2>&1 || docker network create dockernet
 
 # Create container
 if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID --net=dockerhost_net $IMAGE_ID; then \
