@@ -6,7 +6,7 @@ project_name=$(basename $project_path);
 IMAGE_ID=${1:-miniconda_jupyter}
 CONTAINER_ID=${1:-$project_name-v0}
 
-DOCKER_HOST_URL=$(echo $DOCKER_HOST | grep -Eo '\d.*:' | sed 's/://g');
+DOCKER_HOST_URL=127.0.0.1
 
 echo "Running '$CONTAINER_ID' container in detached mode, using '$IMAGE_ID' image:"
 
