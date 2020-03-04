@@ -14,7 +14,7 @@ echo "Running '$CONTAINER_ID' container in detached mode, using '$IMAGE_ID' imag
 docker network inspect dockernet  >/dev/null 2>&1 || docker network create dockernet
 
 # Create container
-if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID --net=dockerhost_net $IMAGE_ID; then \
+if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID --net=dockernet $IMAGE_ID; then \
     SERVER_URL='';
 
     while [[ $SERVER_URL == '' ]] do
