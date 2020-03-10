@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 script_path=$0:A;
 docker_path=$(dirname $script_path);
 project_path=$(dirname $docker_path);
@@ -10,11 +12,8 @@ DOCKER_HOST_URL=127.0.0.1
 
 echo "Running '$CONTAINER_ID' container in detached mode, using '$IMAGE_ID' image:"
 
-# Create 'dockerhost' network if it doesn't exist
-docker network inspect dockernet  >/dev/null 2>&1 || docker network create dockernet
-
 # Create container
-if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID --net=dockernet $IMAGE_ID; then \
+if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID $IMAGE_ID; then \
     SERVER_URL='';
 
     while [[ $SERVER_URL == '' ]] do
@@ -28,4 +27,3 @@ if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID --n
          "    docker rm $CONTAINER_ID"  \
 
 fi
-

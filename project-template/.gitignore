@@ -1,14 +1,12 @@
 ## User
 
-# Ignore data/ and /docker-build/packages files and folders recursively
+# Ignore data/ files and folders recursively
 /data/**
-/docker-build/packages/**
 # Exclude subfolders from the ignore rules
-/data/**/
-!/docker-build/packages/**/
+!/data/**/
 # Now we can whitelist .gitkeep in those subfolders
 !/data/**/.gitkeep
-!/docker-build/packages/**/.gitkeep
+
 
 ## Python defaults
 
