@@ -23,5 +23,4 @@ VOLUME /opt/project
 WORKDIR /opt/project
 
 # Run jupyter notebook
-CMD bin/bash -c "source opt/venv/bin/activate && \
-  jupyter notebook --ip='0.0.0.0' --port=8888 --allow-root --no-browser"
+CMD jupyter notebook --ip='0.0.0.0' --port=8888 --allow-root --no-browser
