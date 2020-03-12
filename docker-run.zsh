@@ -1,19 +1,18 @@
 #!/bin/zsh
 
 script_path=$0:A;
-docker_path=$(dirname $script_path);
-project_path=$(dirname $docker_path);
+project_path=$(dirname $script_path);
 project_name=$(basename $project_path);
 
-IMAGE_ID=${1:-miniconda_jupyter}
-CONTAINER_ID=${1:-$project_name-v0}
+IMAGE_ID=${1:-jupyter-ds}
+CONTAINER_ID=$project_name
 
 DOCKER_HOST_URL=127.0.0.1
 
 echo "Running '$CONTAINER_ID' container in detached mode, using '$IMAGE_ID' image:"
 
 # Create container
-if docker run -d -v $project_path:/project -p 8888:8888 --name $CONTAINER_ID $IMAGE_ID; then \
+if docker run -d -v $project_path/:/opt/project -p 8888:8888 --name $CONTAINER_ID $IMAGE_ID; then \
     SERVER_URL='';
 
     while [[ $SERVER_URL == '' ]] do

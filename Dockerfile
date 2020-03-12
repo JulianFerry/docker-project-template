@@ -1,4 +1,4 @@
-FROM python:3.7-slim-buster
+FROM python:3.8-slim-buster
 
 LABEL MAINTAINER="Julian Ferry <julianferry94@gmail.com>"
 
@@ -9,21 +9,19 @@ RUN apt-get update && apt-get install -y curl
 # Install poetry
 # Warning: build caching means updates to the script will not be caught by docker
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - -y
-ENV PATH="/root/.poetry/bin:/project/.venv/bin:$PATH"
+ENV PATH="/root/.poetry/bin:/opt/venv/bin:$PATH"
+
+# Install python packages common to data science projects
+COPY .requirements/requirements-poetry.txt opt/
+RUN /bin/bash -c "python -m venv /opt/venv && \
+  source /opt/venv/bin/activate && \
+  pip install -U pip && \
+  pip install -r opt/requirements-poetry.txt"
 
 # Create project directory and set as working directory
-RUN mkdir project
-WORKDIR /project
-
-# Add python packages common to most data science projects with poetry
-RUN poetry config virtualenvs.in-project true
-COPY pyproject.toml .
-RUN poetry add pytest flake8 pytest-cov --dev
-COPY requirements.txt .
-RUN poetry add `cat requirements.txt`
-
-# Copy the project
-COPY . .
+VOLUME /opt/project
+WORKDIR /opt/project
 
 # Run jupyter notebook
-CMD jupyter notebook --ip='0.0.0.0' --port=8888 --allow-root --no-browser
+CMD bin/bash -c "source opt/venv/bin/activate && \
+  jupyter notebook --ip='0.0.0.0' --port=8888 --allow-root --no-browser"
