@@ -8,6 +8,8 @@
 !/data/**/
 !/data/**/.gitkeep
 
+*.swp
+
 ## Python defaults
 
 # Byte-compiled / optimized / DLL files
