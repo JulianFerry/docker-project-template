@@ -1,6 +1,0 @@
-jupyter
-pandas
-seaborn
-scikit-learn
-flask
-joblib
