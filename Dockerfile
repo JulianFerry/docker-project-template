@@ -16,12 +16,9 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
 # Install python packages common to data science projects - cached with BuildKit
 ENV PATH="/root/.poetry/bin:/opt/venv/bin:$PATH"
 RUN poetry config virtualenvs.create false
-
-# Add modified pyproject.toml 
-COPY pyproject-v0.toml /opt/
+COPY pyproject.toml poetry.lock /opt/build/
 RUN --mount=type=cache,target=/root/.cache/pypoetry \
-  cd /opt && \
-  mv pyproject-v0.toml pyproject.toml && \
+  cd /opt/build && \
   poetry install --no-root
 
 # Create project directory and set as working directory
