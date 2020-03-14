@@ -1,13 +1,20 @@
-# docker-project-template
+# ds-project-template
 
-Project template to build development images containing jupyter notebook and data science tools
+Project template for data science projects.
+
+Requirements:
+- python ^3.7
+- poetry ^1.0.5 - install with `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python`
+- docker ^18.06 (optional) to deploy build images (uses BuildKit)
+
 
 ## Workflow
 
-1. To build the base image run `export DOCKER_BUILDKIT=1; docker build -t jupyter-ds .`. This will create an image called `jupyter-ds` which contains 
+1. Modify the project name in `pyproject.toml` and run `poetry install --no-root --extras eda` to install the dependencies. This installs:
+- pandas, scikit-learn, flask and joblib as dependencies
+- jupyter and seaborn as extra dependencies
+- flake8, pytest and pytest-cov as dev dependencies
 
-2. To run the container call `source docker-run.zsh jupyter-ds`. This will run a jupyter notebook server at port 8888. The project directory will be mounted to the `/opt/project` folder in the container. The `docker-run.zsh` script uses the script directory name as the container name. The last argument is used as the image name, if nothing is specified it will default to `jupyter-ds`
+2. New packages can be installed with `poetry add package_name`. This will install the new packages to the `.venv` virtual environment and automatically update the `pyproject.toml` and `poetry.lock` files to capture the project dependencies.
 
-3. Once the container has been launched, any new packages should be installed with `docker exec myproject poetry add package_name`. This will install it to the virtual environment inside the container at `/opt/venv`, as well as update the `pyproject.toml` and `poetry.lock` files in your project directory.
-
-4. To persist your changes, commit the container to a new image with `docker commit mycontainer myimage`. E.g. you could use `docker commit project_name project_name:v0`.
+3. Run `source docker/app/docker-build.zsh` to build an image which installs the dependencies listed in `pyproject.toml` (it does not install extra and dev packages) and packages the code in the `app/` folder. By default the image will run `main.py` as its entrypoint. Update `docker/app/Dockerfile` according to your deployment needs.
