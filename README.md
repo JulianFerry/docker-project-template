@@ -20,7 +20,7 @@ Once the project grows, the template will have to be adapted - e.g. by splitting
 - poetry ^1.0.5 - install with `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python`
 - docker ^18.06 (optional) to deploy build images
 
-## Development setup
+# Development setup
 
 1. Clone this repository, modify the project name in `pyproject.toml` and run `poetry install --no-root --extras eda` to install all dependencies. This installs:
 
@@ -56,9 +56,9 @@ This template is designed with the following workflow in mind:
 After checking that tests pass on a gitlab-runner:
 
 6. **CI**: Once you `git push`, Gitlab CI will read `.gitlab-ci.yml` and should perform the following for each package:
-   1. Test: Runs tests against the code
-   2. Build: Bundle the code into an artifact (python package or docker image)
-   3. Release: Push the artifact to a registry (pypi server or docker registry)
+   1. **Test:** Runs tests against the code
+   2. **Build:** Bundle the code into an artifact (python package or docker image)
+   3. **Release:** Push the artifact to a registry (pypi server or docker registry)
 
 7. **Staging:** Run the artifacts in a replica of the production environment (use database `staging` schema)
    1. **Test:** Run automated integration tests.
