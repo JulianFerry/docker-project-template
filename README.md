@@ -2,7 +2,7 @@
 
 The motive of this project template is to start data science modelling projects with deployment in mind. Poetry is used for package version management. Included are scripts which build the ML model as a flask RESTful API contained inside a docker image.
 
-Once the project grows, the template will have to be adapted (e.g. by adding the preprocessing and training stages as build artifacts - this requires splitting the project into multiple packages, each with their own dependencies and Dockerfiles).
+Once the project grows, the template will have to be adapted - e.g. by splitting the project into multiple packages (data_ingest, preprocessing, model training, model serving), each with their own dependencies and Dockerfiles.
 
 Requirements:
 
