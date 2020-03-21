@@ -1,10 +1,20 @@
-# ds-project-template
+# Data Science Project Template
 
-The motive of this project template is to start data science modelling projects with deployment in mind. Poetry is used for package version management. Included are scripts which build the ML model as a flask RESTful API contained inside a docker image.
+## Objective
 
-Once the project grows, the template will have to be adapted - e.g. by splitting the project into multiple packages (data_ingest, preprocessing, model training, model serving), each with their own dependencies and Dockerfiles.
+The motive of this project template is to start data-science projects with deployment in mind.
 
-Requirements:
+Everything is modular and therefore modifiable. By default:
+
+- `Poetry` is used for dependency management
+- `Docker` is used to spin up local development servers (e.g. databases)
+- `Gitlab CI` is used to run continuous integration tests and to build artifacts
+- `Docker` images are the target artifact for production
+- The core python stack is `sqlalchemy`, `pandas`, `scikit-learn`, `joblib` and `flask`
+
+Once the project grows, the template will have to be adapted - e.g. by splitting each stage of the ML pipeline (data ingest, preprocessing, hyperparameter tuning, model training, model serving) into multiple packages, each with their own set of dependencies and Dockerfiles.
+
+## Requirements
 
 - python ^3.7
 - poetry ^1.0.5 - install with `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python`
@@ -12,9 +22,9 @@ Requirements:
 
 ## Development setup
 
-1. Modify the project name in `pyproject.toml` and run `poetry install --no-root --extras eda` to install all dependencies. This installs:
+1. Clone this repository, modify the project name in `pyproject.toml` and run `poetry install --no-root --extras eda` to install all dependencies. This installs:
 
-   - pandas, scikit-learn, flask and joblib as core dependencies
+   - sqlalchemy, pandas, scikit-learn, flask and joblib as core dependencies
    - jupyter and seaborn as extra EDA dependencies
    - flake8, pytest and pytest-cov as dev dependencies
 
