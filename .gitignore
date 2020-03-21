@@ -1,16 +1,28 @@
-## User
+# User
+# ----
 
-# Maintain folder structure with .gitkeep:
-# 1. Ignore folder contents
-# 2. Exclude subfolders from the ignore rules
-# 3. Then whitelist .gitkeep in those subfolders
+# Ignore data/ files and folders recursively
+# Exclude subfolders from the ignore rules
+# Now we can whitelist .gitkeep in those subfolders
 /data/**
 !/data/**/
 !/data/**/.gitkeep
 
-*.swp
+# Database for local development
+/db/
 
-## Python defaults
+# Pickled objects
+pickle/
+
+# GCP credentials
+app/credentials/
+
+# Other
+/.vscode/
+
+
+# Python defaults
+# ---------------
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

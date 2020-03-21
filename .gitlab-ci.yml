@@ -1,0 +1,40 @@
+image: python:3.7-slim-buster
+
+# Change pip's cache directory to be inside the project directory so gitlab-runner CI can cache it
+# (poetry's cache is stored in the poetry.lock file)
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Cache the virtual environment to cache the installed packages
+cache:
+  paths:
+    - .cache/pip
+    - .venv
+
+stages:
+  - test
+  - build
+
+
+test:
+  script:
+    # Install poetry
+    - python -V
+    - python get-poetry.py --version 1.0.5 -y
+    # Force pip and poetry to install to venv virtualenv
+    - python -m venv .venv
+    - export PATH="$HOME/.poetry/bin:$CI_PROJECT_DIR/.venv/bin:$PATH"
+    - poetry config virtualenvs.create false
+    # Install python packages (dev)
+    - poetry export --dev -f requirements.txt > requirements.txt && \
+    - pip install -U pip && \
+    - pip install -r requirements.txt
+    # Run tests
+    - poetry run flake8 src/
+    - poetry run pytest tests/ --cov src/
+
+build:
+  script:
+    - docker info
+    - source docker/app/docker-build
+  artifacts:

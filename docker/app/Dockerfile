@@ -1,36 +1,40 @@
-# syntax=docker/dockerfile:experimental
+# syntax = docker/dockerfile:experimental
 FROM python:3.7-slim-buster as base
 
+WORKDIR /opt/
 
-FROM base as builder
+
+FROM base as installer
 
 # Install poetry
-RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
-    echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' \
-    > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
-    apt update && \
-    apt-get --no-install-recommends install -y curl && \
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - -y
+COPY get-poetry.py /opt/
+RUN python get-poetry.py --version 1.0.5 -y
 
-# Force poetry to install to /opt/venv virtualenv
-RUN python -m venv /opt/venv
+# Force pip and poetry to install to venv virtualenv
+RUN python -m venv venv
 ENV PATH="/root/.poetry/bin:/opt/venv/bin:$PATH"
 RUN poetry config virtualenvs.create false
 
-# Install python packages - cached with BuildKit
-COPY pyproject.toml poetry.lock /opt/build/
-RUN --mount=type=cache,target=/root/.cache/pypoetry \
-    cd /opt/build && \
-    poetry install -vv --no-root --no-dev
+# Install python packages
+COPY pyproject.toml poetry.lock /opt/
+RUN --mount=type=cache,target=/root/.cache/pip \
+    poetry export -f requirements.txt > requirements.txt && \
+    pip install -U pip && \
+    pip install -r requirements.txt
 
 
-FROM base as final
+FROM base as release
 
-# Copy virtualenv and application code over to new image
-COPY --from=builder /opt/venv /opt/venv
+# Copy virtualenv from installer
+COPY --from=installer /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-COPY app /opt/app
+
+# Copy source code from repository - flatten the app/ folder structure
+COPY src/app src/database.py src/preprocessing.py src/model.py  /opt/app/
+
+# Copy created models from S3 bucket (currently from repository)
+RUN mkdir app/pickle
+COPY pickle/PreProcessor.pkl pickle/Model.pkl  /opt/app/pickle/
 
 # Run flask app
-CMD python opt/app/main.py
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8080", "--chdir", "app", "main:app"]
