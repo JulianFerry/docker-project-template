@@ -9,13 +9,13 @@
 !/data/**/.gitkeep
 
 # Database for local development
-/db/
+**/db/
 
 # Pickled objects
-pickle/
+**pickle/
 
 # GCP credentials
-app/credentials/
+**/credentials/
 
 # Other
 /.vscode/
