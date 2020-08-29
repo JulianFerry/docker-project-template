@@ -1,9 +1,9 @@
 #!/bin/zsh
-
 script_dir=$(dirname $0:A);
-project_dir=$(dirname $(dirname $script_dir));
+package_path=$(dirname $script_dir);
+project_path=$(dirname $(dirname $package_path));
 
-mkdir $project_dir/db
+[ ! -d "$project_path/db" ] && mkdir $project_path/db
 
 # Run mysql server at port 3306
 docker run \

@@ -45,7 +45,7 @@ This template is designed with the following workflow in mind:
 2. **Dev:** Develop in jupyter in `notebooks/` (use database `dev` schema)
 
 3. **Dev:** Move code to python modules in `src/` (use database `dev` schema).
-   - Note: Each ML pipeline stage (data_ingest, preprocessing and model training) should should eventually become standalone pacakges. Each will have a build artifact which can be run on a powerful cloud server.
+   - **Note:** Each ML pipeline stage (data_ingest, preprocessing and model training) should should eventually become standalone packages. Each will have a build artifact which can be run on a powerful cloud server.
 
 4. **Test:** Run tests locally with `poetry run pytest` (you should monkeypatch db calls)
 
@@ -56,7 +56,7 @@ This template is designed with the following workflow in mind:
 After checking that tests pass on a gitlab-runner:
 
 6. **CI**: Once you `git push`, Gitlab CI will read `.gitlab-ci.yml` and should perform the following for each package:
-   1. **Test:** Runs tests against the code
+   1. **Test:** Run tests against the code
    2. **Build:** Bundle the code into an artifact (python package or docker image)
    3. **Release:** Push the artifact to a registry (pypi server or docker registry)
 
