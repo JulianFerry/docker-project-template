@@ -1,10 +1,10 @@
-from database import Database
-
 import os
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import make_url
 from sqlalchemy_utils import database_exists
+
+from database import Database
 
 TEST_DIR = os.path.dirname(__file__)
 

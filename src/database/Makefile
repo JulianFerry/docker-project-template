@@ -22,7 +22,8 @@ tests: build db
 
 # Remove artifacts and database files
 .PHONY: clean
-clean: db-rm
+clean:
+	@sudo rm -rf db
 	@rm -rf .pytest_cache
 	@rm -rf .venv
-	@sudo rm -rf db
+	@rm -rf database.egg-info
