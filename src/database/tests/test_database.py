@@ -2,8 +2,8 @@ from database import Database
 
 import os
 import pandas as pd
-import sqlalchemy as sqla
-from sqlalchemy.engine.url import make_url, URL
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import make_url
 from sqlalchemy_utils import database_exists
 
 TEST_DIR = os.path.dirname(__file__)
@@ -25,12 +25,19 @@ class TestDatabase:
     table = 'table'
     database = Database(url, db)
 
+    def test_init(self):
+        """Test that Database connects to a local mysql database"""
+        db = Database.from_defaults()
+        assert db.databases == ['Default'] + \
+            ['information_schema', 'mysql', 'performance_schema', 'sys']
+        assert db.tables == []
+
     def test_load(self):
         """Test that Database loads data from a sqlite database"""
 
         # Set up: create table inside database
         table_name = '_'.join([self.schema, self.table])
-        engine = sqla.create_engine(self.db_url)
+        engine = create_engine(self.db_url)
         engine.execute(
             f'CREATE TABLE "{table_name}" ('
                 'id INTEGER NOT NULL,'
@@ -51,9 +58,7 @@ class TestDatabase:
         assert list(data.columns) == ['id', 'name']
         assert data.values.tolist() == [[1, 'raw1']]
 
-        # Clean up
         clean()
-
 
     def test_save(self):
         """Test that Database saves data to a sqlite database"""
@@ -72,8 +77,7 @@ class TestDatabase:
 
         # Test that: the table exists
         table_name = '_'.join([self.schema, self.table])
-        engine = sqla.create_engine(self.db_url)
+        engine = create_engine(self.db_url)
         assert table_name in engine.table_names()
 
-        # Clean up
         clean()

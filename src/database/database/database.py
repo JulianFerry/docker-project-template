@@ -7,38 +7,50 @@ from sqlalchemy_utils import database_exists, create_database
 
 class Database:
 
-    def __init__(self, url=None, db=None):
+    def __init__(self, url, db):
         """
-        Load database config for SQLalchemy
-        
-        This function will try the following to load the config:
-        - Use the arguments passed to this function
-        - Fetch SQL_SERVER_URL and SQL_DATABASE environment variables
-        - Default database on http://localhost:3306
+        Create a database connector using SQLalchemy
 
-        """
-        if url:
-            url = make_url(url)
-        else:
-            url = make_url(os.environ.get('SQL_SERVER_URL'))
-        db = db if db else os.environ.get('SQL_DATABASE')
-        # Dev defaults (if no env variables)
-        if url is None:
-            url_config = {
-                'drivername': 'mysql+pymysql',
-                'username': 'root',
-                'password': 'root',
-                'host': 'localhost',
-                'port': 3306
-            }
-            url = URL(**url_config)
-        if db is None:
-            db = 'Default'
+        Ways to initialise:
+        - ``db = Database(url, db)``
+        - ``db = Database.from_defaults()``
+        - ``db = Database.from_env()``
+
+        Parameters
+        ----------
+        url: str
+            Database url. For example:
+            - sqlite: ``sqlite:///``
+            - mysql: ``mysql+pymysql://root:***@localhost:3306``
+        db: str
+            Database name. For example:
+            - sqlite: ``path/to/database.sqlite``
+            - mysql: ``Default``
+
+        """        
         self.url = url
         self.db = db
-        # Connect
-        self.create(self.db)
+        self.create(self.db)  # TODO: connect to RDB without creating database
         self.connect(self.db)
+
+    def from_defaults():
+        """Return a database connector created using default config params"""
+        url_config = {
+            'drivername': 'mysql+pymysql',
+            'username': 'root',
+            'password': 'root',
+            'host': 'localhost',
+            'port': 3306
+        }
+        url = URL(**url_config)
+        db = 'Default'
+        return Database(url, db)
+
+    def from_env():
+        """Return a database connector created from environment variables"""
+        url = make_url(os.environ.get('SQL_SERVER_URL'))
+        db = db if db else os.environ.get('SQL_DATABASE')
+        return Database(url, db)
 
     def _db_url(self, db):
         """Extend self.url with a database name"""
@@ -55,7 +67,7 @@ class Database:
             create_database(db_url, encoding='UTF8MB4')
 
     def connect(self, db, create=False):
-        """Connect to database in RDBMS"""
+        """Connect to a database"""
         db_url = self._db_url(db)
         if not database_exists(db_url):
             raise ValueError(f'database not found: {db}')
@@ -96,18 +108,3 @@ class Database:
             if schema:
                 table = '_'.join([schema, table])
             data.to_sql(table, self.engine, if_exists='replace', index=False)
-
-
-# if __name__ == "__main__":
-
-#     # User input argument: database for which to display tables
-#     import sys
-#     arg = sys.argv[1] if len(sys.argv) == 2 else None
-
-#     db = Database()
-#     print(f'Databases: {db.databases}')
-
-#     # Get tables for user input database if it exists
-#     if arg:
-#         db.connect(arg)
-#         print(f'Tables in {arg}: {db.tables}')
