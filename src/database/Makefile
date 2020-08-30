@@ -1,3 +1,7 @@
+# Default
+.PHONY: default
+default: db
+
 # Build requirements
 .PHONY: build
 build: .venv

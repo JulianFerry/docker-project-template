@@ -14,4 +14,6 @@ if ! $(docker ps -qa --filter "name=mysql" | grep -q .); then
         -p 3306:3306 \
         mysql &&
         echo "mysql database container running on port 3306"
+else
+    echo "mysql database container is already running on port 3306"
 fi

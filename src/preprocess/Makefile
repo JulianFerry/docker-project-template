@@ -1,3 +1,7 @@
+# Default
+.PHONY: default
+default: notebook
+
 # Build requirements
 .PHONY: build
 build: .venv

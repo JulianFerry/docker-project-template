@@ -1,3 +1,7 @@
+# Default
+.PHONY: default
+default: local
+
 # Build requirements
 .PHONY: build
 build: .venv
@@ -8,7 +12,7 @@ build: .venv
 .PHONY: local
 local: export preprocessor_path = '../preprocess/pickle/preprocessor.pkl'
 local: export model_path = '../train/pickle/model.pkl'
-local:
+local: build
 	@poetry run python -m serve
 
 # GET local server
