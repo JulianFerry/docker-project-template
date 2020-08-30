@@ -2,17 +2,16 @@
 # ----
 
 # Ignore data/ files and folders recursively
-# Exclude subfolders from the ignore rules
 # Now we can whitelist .gitkeep in those subfolders
-/data/**
-!/data/**/
-!/data/**/.gitkeep
+**/data/**
+!**/data/**/.gitkeep
 
 # Database for local development
 **/db/
 
 # Pickled objects
-**pickle/
+**/pickle/**
+!**/pickle/**/.gitkeep
 
 # GCP credentials
 **/credentials/

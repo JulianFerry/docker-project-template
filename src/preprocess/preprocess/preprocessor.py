@@ -49,7 +49,10 @@ class Preprocessor(TransformerMixin):
         ])
 
     def all_features(X):
-        """Create Preprocessor object using all dataset features"""
+        """
+        Create Preprocessor object using all dataset features
+
+        """
         num_features = list(
             X.select_dtypes(include=[np.number])
             .columns
@@ -65,13 +68,19 @@ class Preprocessor(TransformerMixin):
         return Preprocessor(num_features, cat_features)
 
     def fit(self, X: pd.DataFrame, y=None):
-        """Fit the preprocessing pipeline to the training data"""
+        """
+        Fit the preprocessing pipeline to the training data
+
+        """
         X = X[self.raw_features].copy()
         self.preprocessing_pipeline.fit(X)
         return self
 
     def transform(self, X: pd.DataFrame, y=None):
-        """Return preprocessed data"""
+        """
+        Return preprocessed data
+
+        """
         X = X[self.raw_features].copy()
         X_pp = self.preprocessing_pipeline.transform(X)
         if isinstance(X_pp, scipy.sparse.csr.csr_matrix):
@@ -80,7 +89,8 @@ class Preprocessor(TransformerMixin):
         return X_pp
 
     def get_feature_names(self):
-        """Return feature names after preprocessing
+        """
+        Return feature names after preprocessing
 
         Replicates the ``get_feature_names`` function in the sklearn
         Transformer classes

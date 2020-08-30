@@ -2,7 +2,7 @@
 .PHONY: build
 build: .venv
 .venv:
-	@poetry install --extras eda --extras db
+	@poetry install --extras eda
 
 # Jupyter notebook
 .PHONY: notebook
@@ -19,5 +19,5 @@ tests: build
 clean:
 	@rm -rf .pytest_cache
 	@rm -rf .venv
-	@rm -rf pickle/preprocessor.pkl
-	@rm -rf preprocess.egg-info
+	@rm -rf pickle/model.pkl
+	@rm -rf train.egg-info
